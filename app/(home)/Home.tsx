@@ -4,10 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import tw from "twrnc";
 
-const IgUrl = () =>{
-    const url = "";
-    Linking.openURL(url)
-}
+
 
 const Home = () => {
   return (
@@ -38,11 +35,37 @@ const Home = () => {
         <Text style={tw`text-sm font-bold mt-2`}>Alamsyah Adhim Nugraha</Text>
         <Text style={tw`text-gray-400`}>541221014</Text>
       </View>
+      <View style={tw`p-4 border-b border-gray-200`}>
+          <Text style={tw`text-xl font-bold mb-2`}>Tentang Saya</Text>
+          <Text style={tw`text-gray-600`}>
+            Saya adalah seorang FullStack Developer dengan pengalaman dalam
+            membangun aplikasi mobile dan web. Saya memiliki ketertarikan pada
+            teknologi baru dan pengembangan perangkat lunak.
+          </Text>
+      </View>
+      <View style={tw`h-10`}>
 
+      <View>
+        <View style={tw`flex flex-row justify-between items-center`}>
+          <Text style={tw `text-xl font-bold px-5`}>Project</Text>
+          <Text style={tw `text-blue-500 px-5`}>View all</Text>
+        </View>
+        <View style={tw`flex flex-row gap-5 overflow-hidden overflow-x-scroll px-5 mt-3 w-full`}>
+          <View style={tw`bg-black rounded-xl px-4 py-2`}>
+            <Text style={tw`w-fit text-white font-bold`}>Project 1</Text>
+          </View>
+          <View style={tw`px-4 py-2`}>
+            <Text style={tw`w-fit font-semibold text-gray-600`}>Project 2</Text>
+          </View>
+          <View style={tw`px-4 py-2`}>
+            <Text style={tw`w-fit font-semibold text-gray-600`}>Project 3</Text>
+          </View>
+        </View>
+      </View>
+      </View>
     </SafeAreaView>
     // </ScrollView>
   );
 };
-
 
 export default Home;
