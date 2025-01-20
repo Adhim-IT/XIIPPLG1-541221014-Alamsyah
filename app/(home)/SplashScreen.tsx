@@ -14,7 +14,7 @@ const SplashScreen = () => {
 
     if(!loading) {
         return (
-            <Redirect href="/(home)/Home" />
+            <Redirect href="/(auth)/Login" />
         )
     }
   return (
