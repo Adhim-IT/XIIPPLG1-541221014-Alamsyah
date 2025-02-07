@@ -1,18 +1,25 @@
-import React, { useState } from "react";
-import {
-  Text,
-  Image,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  FlatList,
-  Linking,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import tw from "twrnc";
+import type React from "react"
+import { useState } from "react"
+import { Text, Image, View, TouchableOpacity, ScrollView, FlatList, Linking } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
+import tw from "twrnc"
 
-const projects = ["Project A-Market", "Project Library", "Project Chat App"];
-const projectCards = [
+
+type Project = {
+  id: number
+  title: string
+  description: string
+  image: any
+  category: string
+  url: string
+}
+
+type LikesState = {
+  [key: number]: number
+}
+
+const projects = ["Project A-Market", "Project Library", "Project Chat App"]
+const projectCards: Project[] = [
   {
     id: 1,
     title: "A-Market Payment Gateway",
@@ -37,55 +44,52 @@ const projectCards = [
     category: "Project Chat App",
     url: "https://github.com/Adhim-IT/flutter_chat_app",
   },
-];
+]
 
-const Home = () => {
-  const [activeFilter, setActiveFilter] = useState("Project A-Market");
+const Home: React.FC = () => {
+  const [activeFilter, setActiveFilter] = useState<string>("Project A-Market")
+  const [likes, setLikes] = useState<LikesState>({})
 
-  const filteredProjects = projectCards.filter(
-    (card) => card.category === activeFilter
-  );
+  const handleLike = (id: number) => {
+    setLikes((prevLikes) => ({
+      ...prevLikes,
+      [id]: (prevLikes[id] || 0) + 1,
+    }))
+  }
+
+  const filteredProjects = projectCards.filter((card) => card.category === activeFilter)
 
   const renderProjectFilter = ({ item }: { item: string }) => (
     <TouchableOpacity onPress={() => setActiveFilter(item)} style={tw`mr-4`}>
-      <View
-        style={tw`px-5 py-3 rounded-full shadow-md ${
-          activeFilter === item ? "bg-teal-600" : "bg-gray-300"
-        }`}
-      >
-        <Text
-          style={tw`font-semibold ${
-            activeFilter === item ? "text-white" : "text-gray-700"
-          }`}
-        >
-          {item}
-        </Text>
+      <View style={tw`px-5 py-3 rounded-full shadow-md ${activeFilter === item ? "bg-teal-600" : "bg-gray-300"}`}>
+        <Text style={tw`font-semibold ${activeFilter === item ? "text-white" : "text-gray-700"}`}>{item}</Text>
       </View>
     </TouchableOpacity>
-  );
+  )
 
-  const renderProjectCard = ({ item }: { item: typeof projectCards[0] }) => (
+  const renderProjectCard = ({ item }: { item: Project }) => (
     <View style={tw`w-72 bg-white rounded-2xl shadow-lg mr-6 overflow-hidden`}>
       <Image source={item.image} style={tw`w-full h-44`} resizeMode="cover" />
       <View style={tw`p-5`}>
         <Text style={tw`text-xl font-bold mb-2 text-gray-800`}>{item.title}</Text>
         <Text style={tw`text-sm text-gray-600`}>{item.description}</Text>
       </View>
-      <TouchableOpacity
-        style={tw`bg-teal-500 py-3 px-5 rounded-full self-center my-4 hover:bg-teal-600 hover:text-black`}
-        onPress={() => Linking.openURL(item.url)}
-      >
-        <Text style={tw`text-white font-semibold`}>View Project</Text>
-      </TouchableOpacity>
+      <View style={tw`flex-row justify-between items-center px-5 pb-4`}>
+        <TouchableOpacity style={tw`bg-teal-500 py-2 px-4 rounded-full`} onPress={() => Linking.openURL(item.url)}>
+          <Text style={tw`text-white font-semibold`}>View Project</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={tw`flex-row items-center`} onPress={() => handleLike(item.id)}>
+          <Text style={tw`text-2xl mr-1`}>❤️</Text>
+          <Text style={tw`text-gray-700 font-semibold`}>{likes[item.id] || 0}</Text>
+        </TouchableOpacity>
+      </View>
     </View>
-  );
+  )
 
   return (
     <SafeAreaView style={tw`flex-1 bg-gray-50`}>
       {/* Header Section */}
-      <View
-        style={tw`p-5 bg-teal-500 flex-row justify-between items-center rounded-b-3xl shadow-md`}
-      >
+      <View style={tw`p-5 bg-teal-500 flex-row justify-between items-center rounded-b-3xl shadow-md`}>
         <View>
           <Text style={tw`text-2xl font-bold text-white`}>Hi, Alamsyah</Text>
           <Text style={tw`text-gray-100`}>FullStack Developer</Text>
@@ -104,9 +108,7 @@ const Home = () => {
             source={require("../../assets/images/profile.jpeg")}
             style={tw`w-36 h-36 rounded-full border-4 border-teal-500 shadow-md`}
           />
-          <Text style={tw`text-xl font-bold mt-4 text-gray-800`}>
-            Alamsyah Adhim Nugraha
-          </Text>
+          <Text style={tw`text-xl font-bold mt-4 text-gray-800`}>Alamsyah Adhim Nugraha</Text>
           <Text style={tw`text-gray-500`}>541221014</Text>
         </View>
 
@@ -114,7 +116,9 @@ const Home = () => {
         <View style={tw`p-5 mt-6 bg-white rounded-2xl shadow-md mx-4`}>
           <Text style={tw`text-xl font-bold mb-3 text-gray-800`}>About Me</Text>
           <Text style={tw`text-gray-600 leading-relaxed`}>
-          I'm Alamsyah Adhim Nugraha, a 17-year-old Web and Chatbot Developer with 2 years of experience in technologies like Next.js, Laravel, Node.js, and OpenAI's API. I strive to create innovative solutions and impactful digital applications.
+            I'm Alamsyah Adhim Nugraha, a 17-year-old Web and Chatbot Developer with 2 years of experience in
+            technologies like Next.js, Laravel, Node.js, and OpenAI's API. I strive to create innovative solutions and
+            impactful digital applications.
           </Text>
         </View>
 
@@ -139,6 +143,8 @@ const Home = () => {
           contentContainerStyle={tw`p-5`}
           showsHorizontalScrollIndicator={false}
         />
+
+        {/* Contact Section */}
         <View style={tw`p-5 mt-6 bg-white rounded-2xl shadow-md mx-4`}>
           <Text style={tw`text-xl font-bold mb-4 text-gray-800`}>Contact</Text>
           <View style={tw`flex-row justify-center`}>
@@ -148,21 +154,16 @@ const Home = () => {
             >
               <Image
                 source={require("../../assets/images/ig.jpg")}
-                style={tw`h-16 w-16 rounded-full shadow-md border-2 border-gray-200`} 
+                style={tw`h-16 w-16 rounded-full shadow-md border-2 border-gray-200`}
               />
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => Linking.openURL("https://github.com/Adhim-IT")}
-              style={tw`mr-6`}
-            >
+            <TouchableOpacity onPress={() => Linking.openURL("https://github.com/Adhim-IT")} style={tw`mr-6`}>
               <Image
                 source={require("../../assets/images/github-icon.jpg")}
                 style={tw`h-16 w-16 rounded-full shadow-md border-2 border-gray-200`}
               />
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => Linking.openURL("https://www.linkedin.com/in/alamsyah-nugraha/")}
-            >
+            <TouchableOpacity onPress={() => Linking.openURL("https://www.linkedin.com/in/alamsyah-nugraha/")}>
               <Image
                 source={require("../../assets/images/linkedin.jpg")}
                 style={tw`h-16 w-16 rounded-full shadow-md border-2 border-gray-200`}
@@ -172,7 +173,8 @@ const Home = () => {
         </View>
       </ScrollView>
     </SafeAreaView>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
+
